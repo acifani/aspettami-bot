@@ -12,10 +12,12 @@ def start():
     updater = Updater(TELEGRAM_TOKEN)
     dp = updater.dispatcher
 
-    dp.add_handler(handlers.start_handler())
-    dp.add_handler(handlers.stop_info_handler())
-    dp.add_handler(handlers.stop_search_handler())
+    dp.add_handler(handlers.start_handler_builder())
+    dp.add_handler(handlers.stop_info_handler_builder())
+    dp.add_handler(handlers.stop_search_handler_builder())
     dp.add_error_handler(handlers.error_handler)
 
     updater.start_polling()
+    logger.info("Bot started")
     updater.idle()
+    logger.info("Bot shutting down")

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 import pickledb
 
@@ -13,7 +13,7 @@ def get_fav(user: int) -> List[int]:
         return list()
 
 
-def is_fav(user: int, stop_code: int):
+def is_fav(user: int, stop_code: Union[int, str]):
     return stop_code in get_fav(user)
 
 

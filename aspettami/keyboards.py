@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton as Button
 
@@ -14,7 +14,7 @@ def build_stops_buttons(stops: List[Stop]) -> List[List[Button]]:
     ]
 
 
-def build_stops_keyboard(stops) -> InlineKeyboardMarkup:
+def build_stops_keyboard(stops: List[Stop]) -> InlineKeyboardMarkup:
     buttons = build_stops_buttons(stops)
     return InlineKeyboardMarkup(buttons)
 
@@ -25,13 +25,15 @@ def buttonize_stop(stop: Stop) -> Button:
     return Button(text, callback_data=data)
 
 
-def build_line_stop_keyboard(stop: Stop, is_fav: bool) -> InlineKeyboardMarkup:
-    refresh = Button("🔃 Refresh", callback_data=f"#{stop.get_code()}")
+def build_line_stop_keyboard(
+    stop_code: Union[int, str], is_fav: bool
+) -> InlineKeyboardMarkup:
+    refresh = Button("🔃 Refresh", callback_data=f"#{stop_code}")
 
     if is_fav:
-        fav = Button("💔 Remove from favs", callback_data=f"-{stop.get_code()}")
+        fav = Button("💔 Remove from favs", callback_data=f"-{stop_code}")
     else:
-        fav = Button("❤ Add to favs", callback_data=f"+{stop.get_code()}")
+        fav = Button("❤ Add to favs", callback_data=f"+{stop_code}")
 
     return InlineKeyboardMarkup([[fav, refresh]])
 

@@ -1,6 +1,6 @@
 from telegram import Bot, Update, ParseMode, InlineKeyboardMarkup
 from telegram.error import BadRequest
-from telegram.ext import CommandHandler, CallbackQueryHandler, MessageHandler
+from telegram.ext import CommandHandler, CallbackQueryHandler, MessageHandler, run_async
 from telegram.ext.filters import Filters
 
 import aspettami.api as api
@@ -41,16 +41,19 @@ def del_fav_handler_builder() -> CallbackQueryHandler:
     return CallbackQueryHandler(del_fav_handler, pattern=r"-[\d]+")
 
 
+@run_async
 def error_handler(bot: Bot, update: Update, error: str):
     logger.warn(f"Update {update} caused error {error}")
 
 
+@run_async
 def start_handler(bot: Bot, update: Update):
     update.message.reply_text(
         "Hey there! Start looking for stops by sending me a name or a code"
     )
 
 
+@run_async
 def stop_search_handler(bot: Bot, update: Update):
     message, markup = stop_search(update.message.text, update.message.chat_id)
     update.message.reply_text(
@@ -73,6 +76,7 @@ def stop_search(user_query: str, user: int):
     return message, markup
 
 
+@run_async
 def stop_info_handler(bot: Bot, update: Update):
     query = update.callback_query
     stop_code = query.data[1:].strip()
@@ -86,13 +90,14 @@ def stop_info(stop_code: str, is_fav: bool):
     stop = api.get_stop_info(stop_code)
     if stop:
         message = stop.get_overview()
-        markup = build_line_stop_keyboard(stop, is_fav)
+        markup = build_line_stop_keyboard(stop.get_code(), is_fav)
     else:
         message = "😥 Could not find any stop"
         markup = None
     return message, markup
 
 
+@run_async
 def get_fav_handler(bot: Bot, update: Update):
     chat_id = update.message.chat_id
     message, markup = get_favs(chat_id)
@@ -105,6 +110,7 @@ def get_fav_handler(bot: Bot, update: Update):
     )
 
 
+@run_async
 def get_fav_callback_handler(bot: Bot, update: Update):
     query = update.callback_query
     message, markup = get_favs(query.message.chat_id)
@@ -121,25 +127,27 @@ def get_favs(chat_id: int):
     return message, markup
 
 
+@run_async
 def add_fav_handler(bot: Bot, update: Update):
     query = update.callback_query
     stop_code = query.data[1:].strip()
     user = query.message.chat_id
     db.add_fav(user, stop_code)
-    message, markup = stop_info(stop_code, True)
-    refresh_message(
-        bot, query.message.chat_id, query.message.message_id, query.id, message, markup
+    markup = build_line_stop_keyboard(stop_code, True)
+    refresh_keyboard(
+        bot, query.message.chat_id, query.message.message_id, query.id, markup
     )
 
 
+@run_async
 def del_fav_handler(bot: Bot, update: Update):
     query = update.callback_query
     stop_code = query.data[1:].strip()
     user = query.message.chat_id
     db.del_fav(user, stop_code)
-    message, markup = stop_info(stop_code, False)
-    refresh_message(
-        bot, query.message.chat_id, query.message.message_id, query.id, message, markup
+    markup = build_line_stop_keyboard(stop_code, False)
+    refresh_keyboard(
+        bot, query.message.chat_id, query.message.message_id, query.id, markup
     )
 
 
@@ -161,4 +169,16 @@ def refresh_message(
         )
     except BadRequest:
         # Message is not modified
+        bot.answer_callback_query(query_id)
+
+
+def refresh_keyboard(
+    bot: Bot, chat_id: int, message_id: int, query_id: int, markup: InlineKeyboardMarkup
+):
+    try:
+        bot.edit_message_reply_markup(
+            chat_id=chat_id, message_id=message_id, reply_markup=markup
+        )
+    except BadRequest:
+        # Markup is not modified
         bot.answer_callback_query(query_id)

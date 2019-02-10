@@ -5,11 +5,6 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton as Button
 from aspettami.stop import Stop
 
 
-def build_stops_keyboard(stops) -> InlineKeyboardMarkup:
-    buttons = build_stops_buttons(stops)
-    return InlineKeyboardMarkup(buttons)
-
-
 def build_stops_buttons(stops: List[Stop]):
     return [
         [buttonize_stop(stop)]
@@ -19,14 +14,23 @@ def build_stops_buttons(stops: List[Stop]):
     ]
 
 
+def build_stops_keyboard(stops) -> InlineKeyboardMarkup:
+    buttons = build_stops_buttons(stops)
+    return InlineKeyboardMarkup(buttons)
+
+
 def buttonize_stop(stop: Stop):
     text = f"{stop.get_name()}"
     data = f"#{stop.get_code()}"
     return Button(text, callback_data=data)
 
 
-def build_line_stop_keyboard(stop: Stop):
-    # back = Button("🔙 Back", callback_data="back")
+def build_line_stop_keyboard(stop: Stop, is_fav: bool):
     refresh = Button("🔃 Refresh", callback_data=f"#{stop.get_code()}")
-    # timetable = Button("⏲ Timetable", url="https://google.com")
-    return InlineKeyboardMarkup([[refresh]])
+
+    if is_fav:
+        fav = Button("💔 Remove from favs", callback_data=f"-{stop.get_code()}")
+    else:
+        fav = Button("❤ Add to favs", callback_data=f"+{stop.get_code()}")
+
+    return InlineKeyboardMarkup([[fav, refresh]])

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f8cf355f118aa0ede36871b7c00efccafb468f33b44f1d09ccc9e6f94e976923"
+            "sha256": "f5e68b8f000394daa0fa0fa9a7c55ce8333104d303c3e5a9fac84793fe45d421"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -111,6 +111,13 @@
             ],
             "version": "==2.8"
         },
+        "pickledb": {
+            "hashes": [
+                "sha256:ec6973e65d7d112849e78ce522840aa908efb2523470bb8ce5c7942310192240"
+            ],
+            "index": "pypi",
+            "version": "==0.9.2"
+        },
         "pycparser": {
             "hashes": [
                 "sha256:a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"
@@ -187,11 +194,11 @@
         },
         "flake8": {
             "hashes": [
-                "sha256:09b9bb539920776da542e67a570a5df96ff933c9a08b62cfae920bcc789e4383",
-                "sha256:e0f8cd519cfc0072c0ee31add5def09d2b3ef6040b34dc426445c3af9b02163c"
+                "sha256:c3ba1e130c813191db95c431a18cb4d20a468e98af7a77e2181b68574481ad36",
+                "sha256:fd9ddf503110bf3d8b1d270e8c673aab29ccb3dd6abf29bae1f54e5116ab4a91"
             ],
             "index": "pypi",
-            "version": "==3.7.4"
+            "version": "==3.7.5"
         },
         "mccabe": {
             "hashes": [

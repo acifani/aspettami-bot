@@ -122,7 +122,7 @@ def get_fav_callback_handler(bot: Bot, update: Update):
 def get_favs(chat_id: int):
     favs = db.get_fav(chat_id)
     messages = [api.get_stop_info(str(stop_code)).get_overview() for stop_code in favs]
-    message = "\n".join(messages) if messages else "🙄 You have no favorites"
+    message = "\n\n".join(messages) if messages else "🙄 You have no favorites"
     markup = build_favs_keyboard()
     return message, markup
 

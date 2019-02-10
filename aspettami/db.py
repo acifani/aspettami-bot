@@ -31,6 +31,9 @@ def del_fav(user: int, stop: int):
         return
 
     favs.lremvalue(user_id, stop)
+    # workaround for pickledb bug
+    favs.dump()
+
     # auto clean up
     if favs.llen(user_id) == 0:
         favs.lremlist(user_id)

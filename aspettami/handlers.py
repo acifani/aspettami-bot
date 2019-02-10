@@ -1,4 +1,4 @@
-from telegram import Bot, Update, ParseMode
+from telegram import Bot, Update, ParseMode, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from telegram.ext import CommandHandler, CallbackQueryHandler, MessageHandler
 from telegram.ext.filters import Filters
@@ -77,17 +77,9 @@ def stop_info_handler(bot: Bot, update: Update):
     query = update.callback_query
     stop_code = query.data[1:].strip()
     message, markup = stop_info(stop_code, db.is_fav(query.message.chat_id, stop_code))
-    try:
-        bot.edit_message_text(
-            chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
-            text=message,
-            reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN,
-        )
-    except BadRequest:
-        # Message is not modified
-        bot.answer_callback_query(query.id)
+    refresh_message(
+        bot, query.message.chat_id, query.message.message_id, query.id, message, markup
+    )
 
 
 def stop_info(stop_code: str, is_fav: bool):
@@ -116,17 +108,9 @@ def get_fav_handler(bot: Bot, update: Update):
 def get_fav_callback_handler(bot: Bot, update: Update):
     query = update.callback_query
     message, markup = get_favs(query.message.chat_id)
-    try:
-        bot.edit_message_text(
-            chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
-            text=message,
-            reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN,
-        )
-    except BadRequest:
-        # Message is not modified
-        bot.answer_callback_query(query.id)
+    refresh_message(
+        bot, query.message.chat_id, query.message.message_id, query.id, message, markup
+    )
 
 
 def get_favs(chat_id: int):
@@ -142,19 +126,10 @@ def add_fav_handler(bot: Bot, update: Update):
     stop_code = query.data[1:].strip()
     user = query.message.chat_id
     db.add_fav(user, stop_code)
-
     message, markup = stop_info(stop_code, True)
-    try:
-        bot.edit_message_text(
-            chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
-            text=message,
-            reply_markup=markup,
-            parse_mode=ParseMode.MARKDOWN,
-        )
-    except BadRequest:
-        # Message is not modified
-        bot.answer_callback_query(query.id)
+    refresh_message(
+        bot, query.message.chat_id, query.message.message_id, query.id, message, markup
+    )
 
 
 def del_fav_handler(bot: Bot, update: Update):
@@ -162,16 +137,28 @@ def del_fav_handler(bot: Bot, update: Update):
     stop_code = query.data[1:].strip()
     user = query.message.chat_id
     db.del_fav(user, stop_code)
-
     message, markup = stop_info(stop_code, False)
+    refresh_message(
+        bot, query.message.chat_id, query.message.message_id, query.id, message, markup
+    )
+
+
+def refresh_message(
+    bot: Bot,
+    chat_id: int,
+    message_id: int,
+    query_id: int,
+    message: str,
+    markup: InlineKeyboardMarkup,
+):
     try:
         bot.edit_message_text(
-            chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
+            chat_id=chat_id,
+            message_id=message_id,
             text=message,
             reply_markup=markup,
             parse_mode=ParseMode.MARKDOWN,
         )
     except BadRequest:
         # Message is not modified
-        bot.answer_callback_query(query.id)
+        bot.answer_callback_query(query_id)

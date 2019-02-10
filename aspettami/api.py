@@ -10,7 +10,7 @@ from aspettami.logger import logger
 
 def search_stop(query: str) -> List[Stop]:
     data = {"url": f"tpPortal/tpl/stops/search/{query}"}
-    stops = [Stop(stop) for stop in _call(data)]
+    stops = [Stop(stop) for stop in _call(data) or list()]
     return [stop for stop in stops if stop.is_bus_or_tram_stop()]
 
 

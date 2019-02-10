@@ -60,7 +60,7 @@ def stop_search(user_query: str, user: int):
         message += "\n\n".join([stop.get_overview() for stop in stops])
         markup = build_stops_keyboard(stops)
     else:
-        message = "Could not find any stop"
+        message = "😥 Could not find any stop"
         markup = None
     return message, markup
 
@@ -88,7 +88,7 @@ def stop_info(stop_code: str, is_fav: bool):
         message = stop.get_overview()
         markup = build_line_stop_keyboard(stop, is_fav)
     else:
-        message = "Could not find any stop"
+        message = "😥 Could not find any stop"
         markup = None
     return message, markup
 

@@ -5,7 +5,11 @@ from telegram.ext.filters import Filters
 
 import aspettami.api as api
 from aspettami import db
-from aspettami.keyboards import build_stops_keyboard, build_line_stop_keyboard
+from aspettami.keyboards import (
+    build_stops_keyboard,
+    build_line_stop_keyboard,
+    build_favs_keyboard,
+)
 from aspettami.logger import logger
 
 
@@ -23,6 +27,10 @@ def stop_info_handler_builder() -> CallbackQueryHandler:
 
 def get_fav_handler_builder() -> CommandHandler:
     return CommandHandler("favs", get_fav_handler)
+
+
+def get_fav_callback_handler_builder() -> CallbackQueryHandler:
+    return CallbackQueryHandler(get_fav_callback_handler, pattern=r"^favs$")
 
 
 def add_fav_handler_builder() -> CallbackQueryHandler:
@@ -95,11 +103,38 @@ def stop_info(stop_code: str, is_fav: bool):
 
 def get_fav_handler(bot: Bot, update: Update):
     chat_id = update.message.chat_id
+    message, markup = get_favs(chat_id)
+
+    bot.send_message(
+        chat_id=chat_id,
+        text=message,
+        reply_markup=markup,
+        parse_mode=ParseMode.MARKDOWN,
+    )
+
+
+def get_fav_callback_handler(bot: Bot, update: Update):
+    query = update.callback_query
+    message, markup = get_favs(query.message.chat_id)
+    try:
+        bot.edit_message_text(
+            chat_id=query.message.chat_id,
+            message_id=query.message.message_id,
+            text=message,
+            reply_markup=markup,
+            parse_mode=ParseMode.MARKDOWN,
+        )
+    except BadRequest:
+        # Message is not modified
+        bot.answer_callback_query(query.id)
+
+
+def get_favs(chat_id: int):
     favs = db.get_fav(chat_id)
     messages = [api.get_stop_info(str(stop_code)).get_overview() for stop_code in favs]
     message = "\n".join(messages) if messages else "🙄 You have no favorites"
-
-    bot.send_message(chat_id=chat_id, text=message, parse_mode=ParseMode.MARKDOWN)
+    markup = build_favs_keyboard()
+    return message, markup
 
 
 def add_fav_handler(bot: Bot, update: Update):

@@ -16,6 +16,7 @@ def start():
     dp.add_handler(handlers.stop_info_handler_builder())
     dp.add_handler(handlers.stop_search_handler_builder())
     dp.add_handler(handlers.get_fav_handler_builder())
+    dp.add_handler(handlers.get_fav_callback_handler_builder())
     dp.add_handler(handlers.add_fav_handler_builder())
     dp.add_handler(handlers.del_fav_handler_builder())
     dp.add_error_handler(handlers.error_handler)

@@ -2,7 +2,7 @@ from typing import List, Union
 
 import pickledb
 
-favs = pickledb.load("./favs.db", True)
+favs = pickledb.load("./data/favs.db", True)
 
 
 def get_fav(user: int) -> List[int]:

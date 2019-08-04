@@ -6,7 +6,9 @@ services:
     links:
       - redis
     environment:
-      - REDIS_URL: redis:6379
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - TELEGRAM_TOKEN
   redis:
     image: redis
     command: ["redis-server", "--appendonly", "yes"]

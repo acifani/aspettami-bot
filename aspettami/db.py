@@ -1,14 +1,15 @@
 from typing import List, Union
+import redis
 
-import pickledb
+from aspettami.config import REDIS_HOST, REDIS_PORT
 
-favs = pickledb.load("./data/favs.db", True)
+favs = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
 
 def get_fav(user: int) -> List[int]:
     user_id = str(user)
     if favs.exists(user_id):
-        return favs.lgetall(user_id)
+        return favs.lrange(user_id, 0, -1)
     else:
         return list()
 
@@ -19,21 +20,14 @@ def is_fav(user: int, stop_code: Union[int, str]):
 
 def add_fav(user: int, stop: int):
     user_id = str(user)
-    if not favs.exists(user_id):
-        favs.lcreate(user_id)
-    favs.ladd(user_id, stop)
+    favs.lpush(user_id, stop)
 
 
 def del_fav(user: int, stop: int):
     user_id = str(user)
 
-    if not is_fav(user, stop):
-        return
-
-    favs.lremvalue(user_id, stop)
-    # workaround for pickledb bug
-    favs.dump()
+    favs.lrem(user_id, 0, stop)
 
     # auto clean up
     if favs.llen(user_id) == 0:
-        favs.lremlist(user_id)
+        favs.delete(user_id)

@@ -7,6 +7,9 @@ from aspettami.config import API_URL
 from aspettami.stop import Stop
 from aspettami.logger import logger
 
+# workaround for server not supporting diffie-hellman
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS = "HIGH:!DH:!aNULL"
+
 
 def search_stop(query: str) -> List[Stop]:
     data = {"url": f"tpPortal/tpl/stops/search/{query}"}

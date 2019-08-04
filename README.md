@@ -12,6 +12,6 @@ feature requests.
 ## Run it yourself
 
 ```shell
-$ docker build -t aspettami-bot:latest .
-$ docker run -e "TELEGRAM_TOKEN=<your_tg_token>" -v /path/to/some/data:/usr/src/app/data aspettami-bot:latest
+$ docker-compose build
+$ TELEGRAM_TOKEN=<your_tg_token> docker-compose build
 ```

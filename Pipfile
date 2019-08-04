@@ -11,6 +11,10 @@ flake8 = "*"
 requests = "*"
 python-telegram-bot = "*"
 pickledb = "*"
+redis = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

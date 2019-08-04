@@ -13,5 +13,5 @@ feature requests.
 
 ```shell
 $ docker-compose build
-$ TELEGRAM_TOKEN=<your_tg_token> docker-compose build
+$ TELEGRAM_TOKEN=<your_tg_token> docker-compose up
 ```

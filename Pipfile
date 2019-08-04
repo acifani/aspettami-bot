@@ -10,7 +10,6 @@ flake8 = "*"
 [packages]
 requests = "*"
 python-telegram-bot = "*"
-pickledb = "*"
 redis = "*"
 
 [requires]

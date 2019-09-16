@@ -25,10 +25,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:046832c04d4e752f37383b628bc601a7ea7211496b4638f6514d0e5b9acc4939",
-                "sha256:945e3ba63a0b9f577b1395204e13c3a231f9bc0223888be653286534e5873695"
+                "sha256:e4f3620cfea4f83eedc95b24abd9cd56f3c4b146dd0177e83a21b4eb49e21e50",
+                "sha256:fd7c7c74727ddcf00e9acd26bba8da604ffec95bf1c2144e67aff7a8b50e6cef"
             ],
-            "version": "==2019.6.16"
+            "version": "==2019.9.11"
         },
         "cffi": {
             "hashes": [
@@ -112,11 +112,11 @@
         },
         "python-telegram-bot": {
             "hashes": [
-                "sha256:29f7397ef7c697bc8a3bef3c26895879258d7a8257daf535259a2dd12b8a0f67",
-                "sha256:a5a520ac3fbfda0f35ecfe3c953a2e220a4ef8a03e6117b46bd24d75580bd277"
+                "sha256:7319de07afd5e9f64e408a7c85eaa74945270bb55593150db9d404854c065928",
+                "sha256:96790cb520898fcbf01536f9d1387096e611722aa9d0770b7b28bed873855e96"
             ],
             "index": "pypi",
-            "version": "==12.0.0b1"
+            "version": "==12.1.0"
         },
         "redis": {
             "hashes": [

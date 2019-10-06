@@ -9,7 +9,7 @@ def start():
     logger.info("Bot starting...")
     if TELEGRAM_TOKEN is None:
         raise ValueError("TELEGRAM_TOKEN not set")
-    updater = Updater(TELEGRAM_TOKEN)
+    updater = Updater(TELEGRAM_TOKEN, use_context=True)
     dp = updater.dispatcher
 
     dp.add_handler(handlers.start_handler_builder())

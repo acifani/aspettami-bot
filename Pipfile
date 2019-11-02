@@ -10,7 +10,7 @@ flake8 = "*"
 [packages]
 requests = "==2.22.0"
 python-telegram-bot = "==12.2.0"
-redis = "==3.3.8"
+redis = "==3.3.11"
 
 [requires]
 python_version = "3.7"

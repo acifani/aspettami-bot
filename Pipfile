@@ -9,7 +9,7 @@ flake8 = "*"
 
 [packages]
 requests = "==2.22.0"
-python-telegram-bot = "==12.3.0"
+python-telegram-bot = "==12.4.2"
 redis = "==3.4.1"
 
 [requires]

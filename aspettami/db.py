@@ -1,9 +1,11 @@
 from typing import List, Union
 import redis
 
-from aspettami.config import REDIS_HOST, REDIS_PORT
+from aspettami.config import REDIS_HOST, REDIS_PORT, REDIS_PASSWORD
 
-favs = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+favs = redis.Redis(
+    host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, decode_responses=True
+)
 
 
 def get_fav(user: int) -> List[int]:

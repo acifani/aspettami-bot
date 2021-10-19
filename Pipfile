@@ -13,7 +13,7 @@ python-telegram-bot = "==12.7"
 redis = "==3.5.2"
 
 [requires]
-python_version = "3.7"
+python_version = "3"
 
 [pipenv]
 allow_prereleases = true

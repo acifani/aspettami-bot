@@ -1,0 +1,30 @@
+[project]
+name = "aspettami-bot"
+version = ""
+description = "Telegram bot to fetch real-time status and wait time of Milan's ATM bus and tram lines."
+authors = [
+    {name = "Alessandro Cifani", email = "alessandro.cifani@gmail.com"},
+]
+dependencies = [
+    "requests>=2.28.1",
+    "python-telegram-bot==12.7",
+    "redis>=4.3.4",
+]
+requires-python = ">=3.8"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+
+[[tool.pdm.source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black",
+    "flake8",
+]
